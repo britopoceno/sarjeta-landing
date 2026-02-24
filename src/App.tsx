@@ -68,7 +68,7 @@ export default function App() {
       </div>
 
       <div className="fixed-title">
-        <h1 className="text-[12vw] md:text-[18vw] font-display font-black leading-[0.75] tracking-tighter uppercase flex flex-col items-center select-none">
+        <h1 className="text-[8vw] md:text-[18vw] font-display font-black leading-[0.75] tracking-tighter uppercase flex flex-col items-center select-none">
           <span
             className="mix-blend-difference transition-all duration-700"
             style={{
@@ -93,11 +93,11 @@ export default function App() {
       <main className="relative z-20">
         <section className="block-section" id="hero">
           <div className="max-w-4xl mx-auto w-full flex flex-col items-start gap-8 mt-24 md:mt-48">
-            <div className="brutalist-card bg-secondary text-black max-w-xl -rotate-2 scale-90 md:scale-100">
-              <p className="font-impact text-xl md:text-2xl uppercase leading-tight">Documentação e difusão de expressões artísticas de grupos historicamente marginalizados no semiárido.</p>
+            <div className="brutalist-card bg-secondary text-black max-w-xl md:-rotate-2 scale-90 md:scale-100">
+              <p className="font-impact text-[clamp(1.125rem,4vw,1.5rem)] uppercase leading-tight">Documentação e difusão de expressões artísticas de grupos historicamente marginalizados no semiárido.</p>
             </div>
             <div className="flex gap-4 ml-auto px-4 md:px-0">
-              <a className="brutalist-card bg-white text-black font-bold uppercase tracking-widest hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all text-sm md:text-base rotate-1" href="#manifesto">
+              <a className="brutalist-card bg-white text-black font-bold uppercase tracking-widest hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all text-sm md:text-base md:rotate-1" href="#manifesto">
                 Inovação e criatividade para desenvolver o território!
               </a>
             </div>
@@ -107,10 +107,10 @@ export default function App() {
         <section className="block-section" id="manifesto">
           <div className="container mx-auto grid grid-cols-1 md:grid-cols-12 gap-0 items-center">
             <div className="md:col-start-2 md:col-span-8 brutalist-card bg-white text-black z-30 rotate-0 md:rotate-1">
-              <h2 className="font-display text-4xl md:text-7xl font-black mb-8 leading-none uppercase">
+              <h2 className="font-display text-[clamp(2rem,10vw,4.5rem)] font-black mb-8 leading-none uppercase">
                 NÓS SOMOS PONTO DE <span className="text-primary italic">CULTURA</span>.
               </h2>
-              <p className="text-xl md:text-3xl font-body leading-tight mb-8">
+              <p className="text-[clamp(1.25rem,5vw,1.875rem)] font-body leading-tight mb-8">
                 A Rádio Sarjeta é uma plataforma multidisciplinar de<span className="bg-secondary px-2">BASE</span>.
                 Buscamos ampliar o acesso à arte produzida à <span className="bg-primary text-white px-2">MARGEM</span>.
               </p>
@@ -140,8 +140,8 @@ export default function App() {
               </div>
               <div className="md:col-span-6 md:-ml-20 z-40">
                 <div className="brutalist-card bg-black text-white border-white rotate-0 md:-rotate-1">
-                  <span className="text-primary font-mono text-xs tracking-widest uppercase mb-4 block">Projeto 01 // Documentação & Difusão</span>
-                  <h3 className="text-5xl md:text-7xl font-display font-black uppercase leading-none mb-6">Sarjeta Session</h3>
+                  <span className="text-primary font-mono text-[clamp(0.6rem,2vw,0.75rem)] tracking-widest uppercase mb-4 block">Projeto 01 // Documentação & Difusão</span>
+                  <h3 className="text-[clamp(1.25rem,6vw,4.5rem)] font-display font-black uppercase leading-tight tracking-tighter mb-6 text-balance">Sarjeta Session</h3>
                   <a href="https://youtube.com/playlist?list=PLtdkTVpYucm56xbqpgPO2FIyjPLwQfLxu&si=6Iv43ECnq-sUORF2" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group cursor-pointer">
                     <span className="w-12 h-12 bg-white text-black flex items-center justify-center rounded-none group-hover:bg-primary group-hover:text-white transition-colors">
                       <ArrowRight size={24} />
@@ -158,8 +158,8 @@ export default function App() {
               </div>
               <div className="md:col-start-2 md:col-span-6 md:-mr-20 z-40 md:order-1">
                 <div className="brutalist-card bg-secondary text-black rotate-0 md:rotate-2">
-                  <span className="font-mono text-xs tracking-widest uppercase mb-4 block">Projeto 02 // Fruição & Formação</span>
-                  <h3 className="text-[clamp(1.5rem,8vw,3.5rem)] md:text-7xl font-display font-black uppercase leading-none mb-4 break-words">Som de Quinta</h3>
+                  <span className="font-mono text-[clamp(0.6rem,2vw,0.75rem)] tracking-widest uppercase mb-4 block">Projeto 02 // Fruição & Formação</span>
+                  <h3 className="text-[clamp(1.25rem,8vw,4.5rem)] font-display font-black uppercase leading-tight tracking-tighter mb-4 text-balance">Som de Quinta</h3>
                   <p className="font-body text-lg italic mb-6">O DJ enquanto educador e pesquisador.</p>
                   <a href="https://youtube.com/playlist?list=PLtdkTVpYucm7pt8IOk4Kxy08ikYiYVUpS&si=5NO2oPdCbV22alU7" target="_blank" rel="noopener noreferrer" className="inline-block border-2 border-black px-6 py-2 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all cursor-pointer">
                     Saiba mais
@@ -172,10 +172,10 @@ export default function App() {
               <div className="md:col-span-8 md:col-start-3">
                 <div className="relative group border-4 border-black overflow-hidden">
                   <img alt="Abstract Cultural Expression" className="w-full h-[500px] object-cover grayscale opacity-60" src="https://i.postimg.cc/L5Mh09J7/Whats-App-Image-2024-10-30-at-05-12-31.jpg" />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-12">
-                    <div className="brutalist-card bg-primary text-white rotate-0 md:rotate-1 text-center max-w-2xl">
-                      <span className="font-mono text-xs tracking-widest uppercase mb-4 block">Projeto 03 // Documentação & Pesquisa</span>
-                      <h3 className="text-[clamp(2rem,10vw,4.5rem)] md:text-8xl font-display font-black uppercase leading-none tracking-tighter mb-8 break-words">Bueiro Beat</h3>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-12">
+                    <div className="brutalist-card bg-primary text-white md:rotate-1 text-center max-w-2xl">
+                      <span className="font-mono text-[clamp(0.6rem,2vw,0.75rem)] tracking-widest uppercase mb-4 block">Projeto 03 // Documentação & Pesquisa</span>
+                      <h3 className="text-[clamp(1.5rem,6vw,4rem)] font-display font-black uppercase leading-tight tracking-tighter mb-8 whitespace-nowrap">Bueiro Beat</h3>
                       <a href="https://soundcloud.com/user-27700638/sets/bueiro-beat?si=35e3f86d15424085b11e773ca89899b2&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing" target="_blank" rel="noopener noreferrer" className="inline-block bg-white text-black px-12 py-4 font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all border-4 border-black cursor-pointer">
                         Ouça agora
                       </a>
@@ -191,8 +191,8 @@ export default function App() {
               </div>
               <div className="md:col-span-6 md:-ml-20 z-40">
                 <div className="brutalist-card bg-black text-white border-white rotate-0 md:-rotate-1">
-                  <span className="text-primary font-mono text-xs tracking-widest uppercase mb-4 block">Projeto 04 // Documentação & Difusão</span>
-                  <h3 className="text-[clamp(1.5rem,8vw,3.5rem)] md:text-7xl font-display font-black uppercase leading-none mb-6 break-words">In Tha House</h3>
+                  <span className="text-primary font-mono text-[clamp(0.6rem,2vw,0.75rem)] tracking-widest uppercase mb-4 block">Projeto 04 // Documentação & Difusão</span>
+                  <h3 className="text-[clamp(1.25rem,8vw,4.5rem)] font-display font-black uppercase leading-tight tracking-tighter mb-6 text-balance">In Tha House</h3>
                   <a href="https://youtube.com/playlist?list=PLtdkTVpYucm4mXhJcOZAUBhAfpzqQ5teR&si=efRFqqe9hFyG2pl3" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group cursor-pointer">
                     <span className="w-12 h-12 bg-white text-black flex items-center justify-center rounded-none group-hover:bg-primary group-hover:text-white transition-colors">
                       <ArrowRight size={24} />
@@ -209,8 +209,8 @@ export default function App() {
               </div>
               <div className="md:col-start-2 md:col-span-6 md:-mr-20 z-40 md:order-1">
                 <div className="brutalist-card bg-secondary text-black rotate-0 md:rotate-2">
-                  <span className="font-mono text-xs tracking-widest uppercase mb-4 block">Projeto 05 // Acessibilidade</span>
-                  <h3 className="text-[clamp(1.5rem,8vw,3.5rem)] md:text-7xl font-display font-black uppercase leading-none mb-4 break-words">Som & Sinal</h3>
+                  <span className="font-mono text-[clamp(0.6rem,2vw,0.75rem)] tracking-widest uppercase mb-4 block">Projeto 05 // Acessibilidade</span>
+                  <h3 className="text-[clamp(1.25rem,8vw,4.5rem)] font-display font-black uppercase leading-tight tracking-tighter mb-4 text-balance">Som & Sinal</h3>
                   <p className="font-body text-lg italic mb-6">Música e cultura para todos.</p>
                   <a href="https://youtube.com/playlist?list=PLtdkTVpYucm5vGCxPVZ8HKHZasrurNBfz&si=kwub7RkRODvVxGmQ" target="_blank" rel="noopener noreferrer" className="inline-block border-2 border-black px-6 py-2 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all cursor-pointer">
                     Ver todos
@@ -226,9 +226,8 @@ export default function App() {
           <div className="container mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
               <div className="brutalist-card bg-white text-black rotate-0 md:-rotate-1">
-                <h2 className="text-4xl sm:text-5xl md:text-5xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-display font-black mb-8 leading-[0.8] uppercase relative">
-                  <span className="relative left-[-20px] md:left-[-40px]">CULTURA</span><br />
-                  <span className="text-primary italic">viva</span>
+                <h2 className="text-[clamp(1.5rem,8vw,5rem)] font-display font-black mb-8 leading-[0.8] uppercase">
+                  CULTURA<br /><span className="text-primary">viva</span>
                 </h2>
                 <p className="text-gray-800 text-xl mb-12 font-body leading-tight">
                   Se faz todo dia!

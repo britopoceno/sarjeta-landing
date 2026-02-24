@@ -36,6 +36,14 @@
     overflow-x: hidden;
     font-family: var(--font-body);
   }
+
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    hyphens: none !important;
+  }
 }
 
 .brutalist-bg {
@@ -67,7 +75,7 @@
 
 .brutalist-card {
   position: relative;
-  padding: 2rem;
+  padding: 1rem;
   border: 4px solid black;
   box-shadow: 12px 12px 0px 0px rgba(0, 0, 0, 1);
   transition: all 0.5s;
