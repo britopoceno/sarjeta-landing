@@ -176,7 +176,7 @@ export default function App() {
                     <div className="brutalist-card bg-primary text-white md:rotate-1 text-center max-w-2xl">
                       <span className="font-mono text-[clamp(0.6rem,2vw,0.75rem)] tracking-widest uppercase mb-4 block">Projeto 03 // Documentação & Pesquisa</span>
                       <h3 className="text-[clamp(2rem,7vw,6rem)] font-display font-black uppercase leading-tight tracking-tighter mb-8">Bueiro<br />Beat</h3>
-                      <a href="https://soundcloud.com/user-27700638/sets/bueiro-beat?si=35e3f86d15424085b11e773ca89899b2&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing" target="_blank" rel="noopener noreferrer" className="inline-block bg-white text-black px-12 py-4 font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all border-4 border-black cursor-pointer">
+                      <a href="https://on.soundcloud.com/SPzOr8H9RbtvtfDI4Q" target="_blank" rel="noopener noreferrer" className="inline-block bg-white text-black px-12 py-4 font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all border-4 border-black cursor-pointer">
                         Ouça agora
                       </a>
                     </div>
