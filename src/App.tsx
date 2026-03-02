@@ -122,8 +122,8 @@ export default function App() {
           </div>
         </section>
 
-        <div className="relative overflow-hidden w-full">
-          <div className="relative py-8 md:py-12 overflow-hidden bg-primary border-y-4 border-black -rotate-3 z-40 scale-110">
+        <div className="relative w-full z-40">
+          <div className="relative py-8 md:py-12 overflow-hidden bg-primary border-y-4 border-black -rotate-3 scale-110">
             <div className="marquee-fast whitespace-nowrap items-center gap-12 text-white font-impact text-4xl md:text-6xl uppercase">
               <span>TERRITÓRIO ● DOCUMENTAÇÃO ● DIFUSÃO ● EDUCAÇÃO ● DIVERSIDADE ● </span>
               <span>TERRITÓRIO ● DOCUMENTAÇÃO ● DIFUSÃO ● EDUCAÇÃO ● DIVERSIDADE ● </span>

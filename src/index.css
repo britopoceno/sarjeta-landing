@@ -115,8 +115,10 @@
 
 .marquee-fast {
   display: flex;
-  width: 200%;
+  width: max-content;
   animation: marquee-scroll 15s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 @keyframes marquee-scroll {
