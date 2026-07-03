@@ -1,13 +1,13 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { ENCERRAMENTO, agoraBRT } from './_lib/config';
+import { ENCERRAMENTO, agoraBRT } from './_lib/config.js';
 import {
   adicionarInscricao,
   atualizarResumo,
   garantirAbas,
   lerInscritos,
   linkPlanilha,
-} from './_lib/sheets';
-import { enviarEmailAgradecimento, enviarWhatsApp } from './_lib/notificar';
+} from './_lib/sheets.js';
+import { enviarEmailAgradecimento, enviarWhatsApp } from './_lib/notificar.js';
 
 function cpfValido(cpf: string): boolean {
   const d = (cpf || '').replace(/\D/g, '');

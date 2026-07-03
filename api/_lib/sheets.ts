@@ -1,5 +1,5 @@
 import { JWT } from 'google-auth-library';
-import { agoraBRT } from './config';
+import { agoraBRT } from './config.js';
 
 export const ABA_INSCRITOS = 'Inscritos';
 export const ABA_RESUMO = 'Resumo';

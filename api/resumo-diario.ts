@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { ENCERRAMENTO, hojeBRT } from './_lib/config';
-import { COL, calcularEstatisticas, garantirAbas, lerInscritos, linkPlanilha } from './_lib/sheets';
-import { enviarWhatsApp } from './_lib/notificar';
+import { ENCERRAMENTO, hojeBRT } from './_lib/config.js';
+import { COL, calcularEstatisticas, garantirAbas, lerInscritos, linkPlanilha } from './_lib/sheets.js';
+import { enviarWhatsApp } from './_lib/notificar.js';
 
 const UM_DIA_MS = 24 * 60 * 60 * 1000;
 

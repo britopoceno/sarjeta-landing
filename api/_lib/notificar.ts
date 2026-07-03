@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { EVENTO, GRUPO_WHATSAPP } from './config';
+import { EVENTO, GRUPO_WHATSAPP } from './config.js';
 
 // Envia mensagem pro WhatsApp do organizador via CallMeBot (só funciona pro número ativado)
 export async function enviarWhatsApp(texto: string): Promise<void> {
