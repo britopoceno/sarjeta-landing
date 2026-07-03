@@ -164,16 +164,38 @@ export default function Jornada() {
 
       <main className="relative z-20 max-w-5xl mx-auto px-4 md:px-6 pb-32">
         <header className="mt-8 md:mt-16 mb-16">
-          <div className="brutalist-card bg-secondary text-black inline-block md:-rotate-2 mb-8">
-            <span className="font-mono text-xs font-bold uppercase tracking-widest">
-              Oficina gratuita // 2 dias // Mossoró-RN
-            </span>
+          <div className="relative">
+            {/* Foto do mixer como fundo da faixa do título: só desktop,
+                esmaece para a esquerda (texto) e fica opaca à direita. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute top-0 bottom-0 hidden md:block"
+              style={{
+                right: 'calc((100% - 100vw) / 2)',
+                width: '60vw',
+                backgroundImage: 'url(/jornada-bg.jpg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                WebkitMaskImage:
+                  'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.55) 50%, #000 100%)',
+                maskImage:
+                  'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.55) 50%, #000 100%)',
+                opacity: 0.55,
+              }}
+            />
+            <div className="relative z-10">
+              <div className="brutalist-card bg-secondary text-black inline-block md:-rotate-2 mb-8">
+                <span className="font-mono text-xs font-bold uppercase tracking-widest">
+                  Oficina gratuita // 2 dias // Mossoró-RN
+                </span>
+              </div>
+              <h1 className="font-display font-black uppercase tracking-tighter leading-[0.85] text-[clamp(2rem,6.5vw,4.75rem)] text-white">
+                Jornada de<br />
+                <span className="text-primary">Produção</span><br />
+                Musical
+              </h1>
+            </div>
           </div>
-          <h1 className="font-display font-black uppercase tracking-tighter leading-[0.85] text-[clamp(2rem,6.5vw,4.75rem)] text-white">
-            Jornada de<br />
-            <span className="text-primary">Produção</span><br />
-            Musical
-          </h1>
           <div className="brutalist-card bg-white text-black max-w-2xl mt-10 md:rotate-1">
             <p className="font-impact text-xl md:text-2xl uppercase leading-tight mb-4">
               Você sempre quis produzir música mas não sabe por onde começar? 🎧🔥
