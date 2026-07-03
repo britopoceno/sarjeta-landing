@@ -169,7 +169,7 @@ export default function Jornada() {
               Oficina gratuita // 2 dias // Mossoró-RN
             </span>
           </div>
-          <h1 className="font-display font-black uppercase tracking-tighter leading-[0.85] text-[clamp(2.5rem,9vw,7rem)] text-white">
+          <h1 className="font-display font-black uppercase tracking-tighter leading-[0.85] text-[clamp(2rem,6.5vw,4.75rem)] text-white">
             Jornada de<br />
             <span className="text-primary">Produção</span><br />
             Musical
@@ -184,20 +184,28 @@ export default function Jornada() {
               que a galera TODA finalizou junta! É de graça e aberto pra todo mundo.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-            <div className="brutalist-card bg-black text-white border-white">
-              <span className="text-primary font-mono text-[0.65rem] tracking-widest uppercase block mb-2">Onde</span>
-              <p className="font-body font-bold leading-tight">
-                Banco do Nordeste Cultural Mossoró — Rua 30 de Setembro, s/n, Centro
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-12">
+            <div className="bg-white text-black border-4 border-black p-6 shadow-[8px_8px_0px_0px_#39FF14]">
+              <span className="bg-primary text-white font-mono text-xs font-bold tracking-widest uppercase inline-block px-2 py-1 mb-3">Onde</span>
+              <p className="font-display font-black uppercase leading-none text-xl md:text-2xl">
+                Banco do Nordeste Cultural Mossoró
+              </p>
+              <p className="font-body font-bold text-sm mt-2 text-gray-700">
+                Rua 30 de Setembro, s/n, Centro
               </p>
             </div>
-            <div className="brutalist-card bg-black text-white border-white">
-              <span className="text-primary font-mono text-[0.65rem] tracking-widest uppercase block mb-2">Quando</span>
-              <p className="font-body font-bold leading-tight">Quarta e quinta, 08 e 09 de julho</p>
+            <div className="bg-white text-black border-4 border-black p-6 shadow-[8px_8px_0px_0px_#39FF14]">
+              <span className="bg-primary text-white font-mono text-xs font-bold tracking-widest uppercase inline-block px-2 py-1 mb-3">Quando</span>
+              <p className="font-display font-black uppercase leading-none text-xl md:text-2xl">
+                Quarta e quinta
+              </p>
+              <p className="font-body font-bold text-sm mt-2 text-gray-700">08 e 09 de julho</p>
             </div>
-            <div className="brutalist-card bg-black text-white border-white">
-              <span className="text-primary font-mono text-[0.65rem] tracking-widest uppercase block mb-2">Horário</span>
-              <p className="font-body font-bold leading-tight">A partir das 18h</p>
+            <div className="bg-white text-black border-4 border-black p-6 shadow-[8px_8px_0px_0px_#39FF14]">
+              <span className="bg-primary text-white font-mono text-xs font-bold tracking-widest uppercase inline-block px-2 py-1 mb-3">Horário</span>
+              <p className="font-display font-black uppercase leading-none text-xl md:text-2xl">
+                A partir das 18h
+              </p>
             </div>
           </div>
         </header>
@@ -432,14 +440,22 @@ export default function Jornada() {
               />
 
               <div className="border-t-4 border-black pt-8">
-                <label className="flex items-start gap-4 cursor-pointer">
+                <span className={labelCls}>Consentimento *</span>
+                <label
+                  className={`flex items-start gap-4 cursor-pointer border-4 p-4 transition-colors ${
+                    erros.lgpd ? 'border-primary bg-primary/5' : 'border-black'
+                  }`}
+                >
                   <input
                     type="checkbox"
                     checked={campos.lgpd}
                     onChange={(e) => setCampo('lgpd', e.target.checked)}
+                    required
                     className="mt-1 w-6 h-6 shrink-0 accent-[#FF4500] border-4 border-black"
                   />
-                  <span className="font-body text-sm leading-snug">{LGPD_TEXTO}</span>
+                  <span className="font-body text-sm leading-snug">
+                    {LGPD_TEXTO} <span className="text-primary font-bold">(obrigatório)</span>
+                  </span>
                 </label>
                 {erros.lgpd && <p className={erroCls}>{erros.lgpd}</p>}
               </div>
