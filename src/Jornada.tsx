@@ -204,7 +204,7 @@ export default function Jornada() {
               </h1>
             </div>
           </div>
-          <div className="brutalist-card bg-white text-black max-w-2xl mt-10 md:rotate-1">
+          <div className="relative z-10 brutalist-card bg-white text-black max-w-2xl mt-10 md:rotate-1">
             <p className="font-impact text-xl md:text-2xl uppercase leading-tight mb-4">
               Você sempre quis produzir música mas não sabe por onde começar? 🎧🔥
             </p>
@@ -214,7 +214,7 @@ export default function Jornada() {
               que a galera TODA finalizou junta! É de graça e aberto pra todo mundo.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-12">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-12">
             <div className="bg-white text-black border-4 border-black p-6 shadow-[8px_8px_0px_0px_#39FF14]">
               <span className="bg-primary text-white font-mono text-xs font-bold tracking-widest uppercase inline-block px-2 py-1 mb-3">Onde</span>
               <p className="font-display font-black uppercase leading-none text-xl md:text-2xl">
