@@ -169,18 +169,26 @@ export default function Jornada() {
                 esmaece para a esquerda (texto) e fica opaca à direita. */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute top-0 bottom-0 hidden md:block"
+              className="pointer-events-none absolute hidden md:block"
               style={{
+                top: '-40px',
+                height: 'min(88vh, 940px)',
+                // mesma proporção da foto (retrato) => imagem inteira, sem recorte
+                aspectRatio: '1000 / 1248',
                 right: 'calc((100% - 100vw) / 2)',
-                width: '60vw',
                 backgroundImage: 'url(/jornada-bg.jpg)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
+                backgroundSize: 'contain',
+                backgroundPosition: 'center right',
+                backgroundRepeat: 'no-repeat',
+                // Feather em todas as bordas: intersecção de um fade horizontal
+                // (transparente à esquerda) com um fade vertical (topo e base).
                 WebkitMaskImage:
-                  'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.55) 50%, #000 100%)',
+                  'linear-gradient(to right, transparent 0%, #000 58%), linear-gradient(to bottom, transparent 0%, #000 16%, #000 82%, transparent 100%)',
+                WebkitMaskComposite: 'source-in',
                 maskImage:
-                  'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.55) 50%, #000 100%)',
-                opacity: 0.55,
+                  'linear-gradient(to right, transparent 0%, #000 58%), linear-gradient(to bottom, transparent 0%, #000 16%, #000 82%, transparent 100%)',
+                maskComposite: 'intersect',
+                opacity: 0.62,
               }}
             />
             <div className="relative z-10">
