@@ -1,4 +1,8 @@
 {
-  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }],
+  "rewrites": [
+    { "source": "/jornadamusical", "destination": "/jornadamusical.html" },
+    { "source": "/jornadamusical/", "destination": "/jornadamusical.html" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
   "crons": [{ "path": "/api/resumo-diario", "schedule": "0 23 * * *" }]
 }
