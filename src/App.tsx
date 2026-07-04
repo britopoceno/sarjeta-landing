@@ -257,7 +257,7 @@ export default function App() {
           <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="text-center md:text-left">
               <p className="font-display font-black text-4xl uppercase tracking-tighter">RÁDIO SARJETA</p>
-              <p className="font-mono text-xs uppercase tracking-widest mt-2">© 2020 Eu sei que ninguém viu o sertão de metal, mas eu sonhei. // radiosarjeta@gmail.com</p>
+              <p className="font-mono text-xs uppercase tracking-widest mt-2">© 2020 Eu sei que ninguém viu o sertão de metal, mas eu sonhei. // contato@sarjeta.com</p>
             </div>
             <div className="flex gap-4">
               <div className="w-12 h-12 border-4 border-black bg-primary"></div>

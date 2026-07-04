@@ -510,7 +510,7 @@ export default function Jornada() {
 
         <footer className="mt-20 text-center">
           <p className="font-mono text-xs uppercase tracking-widest text-white/40">
-            Rádio Sarjeta // Ponto de Cultura // radiosarjeta@gmail.com
+            Rádio Sarjeta // Ponto de Cultura // contato@sarjeta.com
           </p>
         </footer>
       </main>

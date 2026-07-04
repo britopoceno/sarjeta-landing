@@ -18,6 +18,10 @@ export async function enviarEmailAgradecimento(destino: string, nome: string): P
   const pass = process.env.GMAIL_APP_PASSWORD;
   if (!user || !pass) throw new Error('GMAIL_USER/GMAIL_APP_PASSWORD não configurados');
 
+  // Autentica na conta do Gmail, mas envia como o alias institucional.
+  // GMAIL_FROM precisa estar cadastrado como "Enviar e-mail como" no Gmail.
+  const remetente = process.env.GMAIL_FROM || 'contato@sarjeta.com';
+
   const transporte = nodemailer.createTransport({ service: 'gmail', auth: { user, pass } });
   const primeiroNome = nome.trim().split(/\s+/)[0];
 
@@ -67,7 +71,8 @@ export async function enviarEmailAgradecimento(destino: string, nome: string): P
   </div>`;
 
   await transporte.sendMail({
-    from: `Rádio Sarjeta <${user}>`,
+    from: `Rádio Sarjeta <${remetente}>`,
+    replyTo: remetente,
     to: destino,
     subject: `Inscrição confirmada — ${EVENTO.nome} 🎧`,
     html,
