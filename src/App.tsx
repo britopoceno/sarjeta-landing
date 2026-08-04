@@ -36,7 +36,7 @@ export default function App() {
             <a className="hover:text-primary transition-colors" href="#projetos">Projetos</a>
             <a className="hover:text-primary transition-colors" href="#contato">Conexão</a>
             <div className="animate-breathing cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <img src="https://i.postimg.cc/ryWfdfMr/RADIO-SARJ.png" alt="Rádio Sarjeta Logo" className="w-16 h-16 animate-[spin_10s_linear_infinite]" />
+              <img src="/logo.png" alt="Rádio Sarjeta Logo" className="w-16 h-16 animate-[spin_10s_linear_infinite]" />
             </div>
           </div>
 
@@ -63,7 +63,7 @@ export default function App() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         >
-          <img src="https://i.postimg.cc/ryWfdfMr/RADIO-SARJ.png" alt="Rádio Sarjeta Logo" className="w-32 h-32 animate-[spin_10s_linear_infinite]" />
+          <img src="/logo.png" alt="Rádio Sarjeta Logo" className="w-32 h-32 animate-[spin_10s_linear_infinite]" />
         </div>
       </div>
 
