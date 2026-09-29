@@ -24,6 +24,8 @@ View your app in AI Studio: https://ai.studio/apps/cd714b02-953e-44c7-9ada-b476f
 
 Paginas estaticas geradas no build (`npm run build` = `vite build` + `scripts/blog/build-blog.ts`), a partir da rota publica do adm (`GET /blog/publicados`). Gera `/blog`, `/blog/pagina/N` (a cada 12 posts), `/blog/<slug>`, `sitemap.xml` e `rss.xml` em `dist/`. Markdown com `markdown-it` (HTML desligado, sem imagem no corpo, links so http/https/mailto).
 
+Capa: `capa: { url, alt, credito? }`. O `credito` (texto simples, opcional; ausente, nulo ou vazio = sem legenda) vira uma `figcaption` abaixo da capa e `creditText` no JSON-LD; quebras de linha viram espaco e o texto e cortado em 200 caracteres.
+
 Se a rota estiver fora do ar ou ainda nao existir, o build NAO falha: gera `/blog` vazio, sitemap e RSS so com a home e imprime `[blog] AVISO` no log.
 
 Variaveis (nomes; nenhuma e segredo):
@@ -31,7 +33,7 @@ Variaveis (nomes; nenhuma e segredo):
 | Variavel | Para que serve |
 |---|---|
 | `BLOG_API_URL` | Endereco `.convex.site` da rota publica (tem padrao no script) |
-| `SITE_URL` | Base das URLs absolutas (padrao `https://sarjeta.com`) |
+| `SITE_URL` | Base das URLs absolutas (padrao `https://www.sarjeta.com`, o dominio canonico; o apex sarjeta.com redireciona 307) |
 | `BLOG_TIMEOUT_MS` | Timeout da busca (padrao 15000) |
 | `BLOG_FIXTURE` | So desenvolvimento: JSON local (ex.: `scripts/fixtures/blog-exemplo.json`); paginas saem com `noindex`; ignorada quando `VERCEL_ENV=production` |
 
