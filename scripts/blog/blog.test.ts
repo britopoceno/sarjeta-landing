@@ -93,6 +93,35 @@ test("Markdown hostil: nenhum script, img, iframe, on* nem href perigoso na said
   assert.doesNotMatch(html, /href="https:\/\/exemplo\.com\/p\.gif"/);
 });
 
+test("LAND-1: alt com mais de 300 caracteres ou com quebra de linha vira texto, sem link nem imagem", () => {
+  const casos = [
+    `![${"a".repeat(301)}](https://evil.example/x)`,
+    "![a\nb](https://evil.example/x)",
+    `![${"a".repeat(301)}][ref]\n\n[ref]: https://evil.example/x`,
+    "![a\nb][ref]\n\n[ref]: https://evil.example/x",
+    `![${"a".repeat(5000)}](https://evil.example/x)`,
+  ];
+  for (const fonte of casos) {
+    const html = md.render(fonte);
+    assert.doesNotMatch(html, /<a[\s>]/i, fonte.slice(0, 40));
+    assert.doesNotMatch(html, /<img/i, fonte.slice(0, 40));
+    assert.doesNotMatch(html, /href=/i, fonte.slice(0, 40));
+  }
+  // O alt longo e o sufixo aparecem como texto (escapado), sem perder o conteudo.
+  const longo = md.render(`![${"a".repeat(301)}](https://evil.example/x)`);
+  assert.match(longo, /!\[a{301}\]\(https:\/\/evil\.example\/x\)/);
+  // Sem `]` adiante: so o `![` e o resto e texto comum.
+  assert.match(md.render("![sem fecho"), /!\[sem fecho/);
+  // Um link legitimo depois de uma imagem longa continua link.
+  const depois = md.render(`![${"a".repeat(301)}](https://evil.example/x) e [ok](https://exemplo.com)`);
+  assert.match(depois, /<a href="https:\/\/exemplo\.com"/);
+  assert.doesNotMatch(depois, /href="https:\/\/evil\.example/);
+  // Custo linear: muitos `![` sem fecho nao explodem.
+  const t0 = Date.now();
+  md.render("![".repeat(20_000));
+  assert.ok(Date.now() - t0 < 2_000, "renderizacao de ![ repetido demorou demais");
+});
+
 test("linkPermitido: so http, https, mailto e caminho iniciado por /", () => {
   for (const ok of ["https://a.com", "http://a.com", "mailto:a@a.com", "/blog/x"]) {
     assert.equal(linkPermitido(ok), true, ok);
