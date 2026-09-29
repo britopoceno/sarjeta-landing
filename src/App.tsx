@@ -34,6 +34,7 @@ export default function App() {
             <a className="hover:text-primary transition-colors" href="https://app.sarjeta.com" target="_blank" rel="noopener noreferrer">Sarjeta.Lab</a>
             <a className="hover:text-primary transition-colors" href="#manifesto">Quem somos</a>
             <a className="hover:text-primary transition-colors" href="#projetos">Projetos</a>
+            <a className="hover:text-primary transition-colors" href="/blog">Blog</a>
             <a className="hover:text-primary transition-colors" href="#contato">Conexão</a>
             <div className="animate-breathing cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <img src="/logo.png" alt="Rádio Sarjeta Logo" className="w-16 h-16 animate-[spin_10s_linear_infinite]" />
@@ -51,10 +52,11 @@ export default function App() {
       </nav>
 
       {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 z-[140] bg-black transition-transform duration-500 flex flex-col items-center justify-center space-y-12 p-12 ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+      <div className={`fixed inset-0 z-[140] bg-black transition-transform duration-500 flex flex-col items-center justify-center space-y-8 px-12 py-12 ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <a className="text-3xl font-display font-black uppercase text-white hover:text-primary transition-all active:scale-95" href="https://app.sarjeta.com" target="_blank" rel="noopener noreferrer" onClick={() => setIsMenuOpen(false)}>Sarjeta.lab</a>
         <a className="text-3xl font-display font-black uppercase text-white hover:text-primary transition-all active:scale-95 text-center leading-none" href="#manifesto" onClick={() => setIsMenuOpen(false)}>Quem<br />somos</a>
         <a className="text-3xl font-display font-black uppercase text-white hover:text-primary transition-all active:scale-95" href="#projetos" onClick={() => setIsMenuOpen(false)}>Projetos</a>
+        <a className="text-3xl font-display font-black uppercase text-white hover:text-primary transition-all active:scale-95" href="/blog" onClick={() => setIsMenuOpen(false)}>Blog</a>
         <a className="text-3xl font-display font-black uppercase text-white hover:text-primary transition-all active:scale-95" href="#contato" onClick={() => setIsMenuOpen(false)}>Conexão</a>
         <div
           className="pt-12 cursor-pointer active:scale-90 transition-transform"
