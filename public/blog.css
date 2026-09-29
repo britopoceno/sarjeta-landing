@@ -381,6 +381,17 @@ a:hover {
   height: auto;
 }
 
+.capa-credito {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-top: 3px solid var(--borda);
+  color: var(--suave);
+  font-family: var(--fonte-mono);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
 /* Texto de leitura: coluna de ate 68 caracteres, 18px, altura de linha 1,65. */
 .corpo {
   max-width: 68ch;

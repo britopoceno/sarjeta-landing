@@ -1,4 +1,4 @@
-import type { Post } from "./dados.ts";
+import { normalizarCredito, type Post } from "./dados.ts";
 import { caminhoDaLista, esc, iso, POSTS_POR_PAGINA, totalDePaginas } from "./feeds.ts";
 import { renderizarMarkdown, type Markdown } from "./markdown.ts";
 
@@ -212,8 +212,11 @@ export function paginaDoPost(ctx: Contexto, post: Post): string {
   const descricao = descricaoDoPost(post);
   const imagem = post.capa ?? imagemPadrao(ctx);
   const atualizado = post.atualizadoEm - post.publicadoEm > 24 * 3600 * 1000;
+  const credito = post.capa ? normalizarCredito(post.capa.credito) : undefined;
   const capa = post.capa
-    ? `<figure class="capa"><img src="${esc(post.capa.url)}" alt="${esc(post.capa.alt)}" decoding="async" /></figure>`
+    ? `<figure class="capa"><img src="${esc(post.capa.url)}" alt="${esc(post.capa.alt)}" decoding="async" />${
+        credito !== undefined ? `<figcaption class="capa-credito">${esc(credito)}</figcaption>` : ""
+      }</figure>`
     : "";
   return documento({
     titulo: `${post.titulo} · ${NOME}`,
@@ -236,7 +239,15 @@ export function paginaDoPost(ctx: Contexto, post: Post): string {
       datePublished: iso(post.publicadoEm),
       dateModified: iso(post.atualizadoEm),
       inLanguage: "pt-BR",
-      ...(post.capa ? { image: [post.capa.url] } : {}),
+      ...(post.capa
+        ? {
+            image: [
+              credito !== undefined
+                ? { "@type": "ImageObject", url: post.capa.url, creditText: credito }
+                : post.capa.url,
+            ],
+          }
+        : {}),
       ...(post.categorias.length > 0 ? { keywords: post.categorias.join(", ") } : {}),
       author: post.autoria ? { "@type": "Person", name: post.autoria } : { "@type": "Organization", name: NOME },
       publisher: {

@@ -2,14 +2,33 @@
  * Dados do blog: tipos, validacao defensiva e busca da rota publica do adm.
  *
  * Contrato (adm, `GET /blog/publicados`, so publicados, mais recentes primeiro, ate 100):
- * { geradoEm, posts: [{ slug, titulo, resumo, corpoMarkdown, capa: {url, alt} | null,
+ * { geradoEm, posts: [{ slug, titulo, resumo, corpoMarkdown, capa: {url, alt, credito?} | null,
  *   categorias, autoria, publicadoEm, atualizadoEm }] }
  *
  * O build NUNCA pode falhar por causa dos dados: qualquer problema vira aviso e
  * o pior caso e o blog vazio.
  */
 
-export type Capa = { url: string; alt: string };
+/** `credito` e opcional: a rota pode omitir, mandar null ou vazio. Texto simples, uma linha. */
+export type Capa = { url: string; alt: string; credito?: string };
+
+export const MAX_CREDITO = 200;
+
+/**
+ * Credito da foto: so texto. Quebras e espacos repetidos viram um espaco, caracteres de controle saem,
+ * e acima de MAX_CREDITO o corte e por caractere Unicode (nunca no meio de um par substituto) com reticencias.
+ * Devolve undefined quando nao ha texto util (ausente, nulo, vazio, nao-string).
+ */
+export function normalizarCredito(v: unknown): string | undefined {
+  if (typeof v !== "string") return undefined;
+  const limpo = v
+    .replace(/[\x00-\x08\x0b-\x1f\x7f]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (limpo === "") return undefined;
+  const letras = Array.from(limpo);
+  return letras.length <= MAX_CREDITO ? limpo : `${letras.slice(0, MAX_CREDITO - 1).join("").trimEnd()}…`;
+}
 
 export type Post = {
   slug: string;
@@ -86,7 +105,8 @@ export function validarPost(bruto: unknown, indice: number): { post: Post; aviso
     const c = p.capa as Record<string, unknown>;
     const url = typeof c === "object" ? urlHttps(c.url) : null;
     if (url !== null && ehTexto(c.alt) && c.alt.trim() !== "") {
-      capa = { url, alt: c.alt.trim() };
+      const credito = normalizarCredito(c.credito);
+      capa = { url, alt: c.alt.trim(), ...(credito !== undefined ? { credito } : {}) };
     } else {
       avisos.push(`${rotulo}: capa invalida (precisa de url https e alt), post segue sem capa`);
     }
