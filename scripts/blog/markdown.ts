@@ -80,7 +80,7 @@ function tagDeTitulo(tag: string): string {
 /** markdown-it 15 nao traz tipos (e o pacote de tipos ficou de fora de proposito): so o que se usa. */
 export type Markdown = { render(texto: string): string };
 
-export function criarMarkdown(siteUrl = "https://sarjeta.com"): Markdown {
+export function criarMarkdown(siteUrl = "https://www.sarjeta.com"): Markdown {
   const md = new MarkdownIt({ html: false, linkify: false, typographer: false, breaks: false });
   md.disable(["image", "table", "strikethrough"]);
   md.validateLink = linkPermitido;

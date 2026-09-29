@@ -3,7 +3,7 @@
  *
  * Variaveis (so nomes; nenhuma e segredo):
  *   BLOG_API_URL     rota publica do adm (padrao: a de producao, ver abaixo)
- *   SITE_URL         base das URLs absolutas (padrao https://sarjeta.com)
+ *   SITE_URL         base das URLs absolutas (padrao https://www.sarjeta.com)
  *   BLOG_TIMEOUT_MS  timeout da busca (padrao 15000)
  *   BLOG_FIXTURE     arquivo JSON local para testar sem rede. IGNORADO em producao
  *                    (VERCEL_ENV=production): o build de producao so usa a rota real.
@@ -25,7 +25,7 @@ function aviso(msg: string): void {
 }
 
 async function main(): Promise<void> {
-  const siteUrl = (process.env.SITE_URL || "https://sarjeta.com").replace(/\/+$/, "");
+  const siteUrl = (process.env.SITE_URL || "https://www.sarjeta.com").replace(/\/+$/, "");
   const dist = path.resolve(process.cwd(), "dist");
   const emProducao = process.env.VERCEL_ENV === "production";
   const fixture = process.env.BLOG_FIXTURE;
@@ -71,7 +71,7 @@ main().catch(async (erro) => {
   try {
     await gerarBlog({
       dist: path.resolve(process.cwd(), "dist"),
-      siteUrl: (process.env.SITE_URL || "https://sarjeta.com").replace(/\/+$/, ""),
+      siteUrl: (process.env.SITE_URL || "https://www.sarjeta.com").replace(/\/+$/, ""),
       posts: [],
     });
     aviso("gerado o estado vazio como reserva");
