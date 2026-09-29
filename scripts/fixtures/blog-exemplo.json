@@ -34,6 +34,28 @@
       "publicadoEm": 1789700000000,
       "atualizadoEm": 1789700000000
     },
+    {
+      "slug": "exemplo-capa-com-credito",
+      "titulo": "[exemplo] Post com capa e credito da foto",
+      "resumo": "[exemplo] Capa com credito: a legenda aparece abaixo da imagem.",
+      "corpoMarkdown": "Corpo de exemplo para testar a legenda da capa.",
+      "capa": { "url": "https://exemplo.com/capa-credito-exemplo.png", "alt": "[exemplo] Descricao ficticia da capa", "credito": "[exemplo] Foto: Pessoa Ficticia" },
+      "categorias": ["exemplo"],
+      "autoria": "[exemplo] Pessoa Ficticia",
+      "publicadoEm": 1789650000000,
+      "atualizadoEm": 1789650000000
+    },
+    {
+      "slug": "exemplo-capa-sem-credito",
+      "titulo": "[exemplo] Post com capa e sem credito",
+      "resumo": "[exemplo] Capa sem credito: nenhuma legenda.",
+      "corpoMarkdown": "Corpo de exemplo para testar a legenda da capa.",
+      "capa": { "url": "https://exemplo.com/capa-sem-credito-exemplo.png", "alt": "[exemplo] Descricao ficticia da capa" },
+      "categorias": ["exemplo"],
+      "autoria": "[exemplo] Pessoa Ficticia",
+      "publicadoEm": 1789600000000,
+      "atualizadoEm": 1789600000000
+    },
     { "slug": "exemplo-invalido", "resumo": "[exemplo] post sem titulo, deve ser descartado" }
   ]
 }

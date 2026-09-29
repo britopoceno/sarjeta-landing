@@ -8,7 +8,8 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
-import { validarPost, validarResposta, type Post } from "./dados.ts";
+import { spawnSync } from "node:child_process";
+import { MAX_CREDITO, validarPost, validarResposta, type Post } from "./dados.ts";
 import { gerarRss, gerarSitemap, POSTS_POR_PAGINA } from "./feeds.ts";
 import { gerarBlog } from "./gerar.ts";
 import { criarMarkdown, linkPermitido } from "./markdown.ts";
@@ -254,10 +255,10 @@ test("Validacao defensiva: descarta post com campo faltando, slug ruim ou repeti
   assert.ok("motivo" in validarPost({}, 0));
 });
 
-test("Fixture de exemplo: 3 posts validos, 1 descartado, todos marcados [exemplo]", async () => {
+test("Fixture de exemplo: 5 posts validos, 1 descartado, todos marcados [exemplo]", async () => {
   const bruto = JSON.parse(await readFile(new URL("../fixtures/blog-exemplo.json", import.meta.url), "utf8"));
   const { posts, avisos } = validarResposta(bruto);
-  assert.equal(posts.length, 3);
+  assert.equal(posts.length, 5);
   assert.equal(avisos.length, 1);
   for (const p of posts) assert.match(p.titulo, /^\[exemplo\]/);
   const html = posts.map((p) => paginaDoPost(ctx, p)).join("\n");
@@ -297,4 +298,171 @@ test("Estado vazio em disco: /blog existe, sem posts, sitemap e rss so com a hom
   } finally {
     await rm(dist, { recursive: true, force: true });
   }
+});
+
+// ---------------------------------------------------------------------------
+// Credito da foto de capa (adm: `capa.credito`, aditivo e opcional)
+// ---------------------------------------------------------------------------
+
+const CAPA_BASE = { url: "https://exemplo.com/capa.png", alt: "[exemplo] capa" };
+
+function bruto(capa: unknown): unknown {
+  return { slug: "com-credito", titulo: "[exemplo] T", resumo: "r", corpoMarkdown: "c", publicadoEm: 1_790_000_000_000, capa };
+}
+
+function creditoValidado(capa: unknown): string | undefined {
+  const r = validarPost(bruto(capa), 0);
+  assert.ok("post" in r, "post deveria ser valido");
+  return r.post.capa?.credito;
+}
+
+function jsonLd(html: string): { image?: unknown[] } {
+  return JSON.parse(/<script type="application\/ld\+json">(.*?)<\/script>/.exec(html)![1]!);
+}
+
+test("Credito presente: figcaption abaixo da imagem, dentro do figure, e no JSON-LD", () => {
+  const p = post(1, { capa: { ...CAPA_BASE, credito: "[exemplo] Foto: Pessoa Ficticia" } });
+  const html = paginaDoPost(ctx, p);
+  assert.match(
+    html,
+    /<figure class="capa"><img [^>]*\/><figcaption class="capa-credito">\[exemplo\] Foto: Pessoa Ficticia<\/figcaption><\/figure>/,
+  );
+  assert.deepEqual(jsonLd(html).image, [
+    { "@type": "ImageObject", url: CAPA_BASE.url, creditText: "[exemplo] Foto: Pessoa Ficticia" },
+  ]);
+});
+
+test("Credito ausente, nulo, vazio ou so espacos: sem figcaption e JSON-LD antigo (lista de URL)", () => {
+  const casos: unknown[] = [undefined, null, "", "   \n\t ", 42, { x: 1 }];
+  for (const credito of casos) {
+    assert.equal(creditoValidado({ ...CAPA_BASE, credito }), undefined, JSON.stringify(credito));
+  }
+  for (const capa of [{ ...CAPA_BASE }, { ...CAPA_BASE, credito: undefined }]) {
+    const html = paginaDoPost(ctx, post(1, { capa }));
+    assert.doesNotMatch(html, /figcaption/);
+    assert.deepEqual(jsonLd(html).image, [CAPA_BASE.url]);
+  }
+  // Post sem capa continua sem figure.
+  assert.doesNotMatch(paginaDoPost(ctx, post(2)), /<figure|figcaption/);
+  // A validacao nao acrescenta a chave quando nao ha credito.
+  const r = validarPost(bruto({ ...CAPA_BASE, credito: null }), 0);
+  assert.ok("post" in r);
+  assert.equal("credito" in r.post.capa!, false);
+});
+
+test("Credito com HTML hostil e aspas: escapado no HTML, sem link, JSON-LD sem fechar a tag", () => {
+  const hostil = `<script>alert(1)</script> "aspas" 'simples' & <a href="javascript:x">y</a> https://evil.example/x`;
+  const r = validarPost(bruto({ ...CAPA_BASE, credito: hostil }), 0);
+  assert.ok("post" in r);
+  const html = paginaDoPost(ctx, r.post);
+  const legenda = /<figcaption class="capa-credito">(.*?)<\/figcaption>/.exec(html)![1]!;
+  assert.doesNotMatch(legenda, /[<>"]/);
+  assert.match(legenda, /&lt;script&gt;alert\(1\)&lt;\/script&gt; &quot;aspas&quot; &#39;simples&#39; &amp; &lt;a href=/);
+  assert.doesNotMatch(legenda, /<a[\s>]/);
+  assert.doesNotMatch(html, /<script>alert/);
+  assert.equal((html.match(/<script/g) ?? []).length, 1, "so o script do JSON-LD");
+  assert.doesNotMatch(/<script type="application\/ld\+json">(.*?)<\/script>/.exec(html)![1]!, /</);
+});
+
+test("Credito com quebra de linha vira uma linha so", () => {
+  assert.equal(
+    creditoValidado({ ...CAPA_BASE, credito: "  Foto:\nPessoa\r\n\r\nFicticia\t/  Coletivo X  " }),
+    "Foto: Pessoa Ficticia / Coletivo X",
+  );
+  assert.equal(creditoValidado({ ...CAPA_BASE, credito: "a\u0000b\u0007c" }), "a b c");
+});
+
+test("Credito muito longo: corte seguro em 200 caracteres com reticencias, sem partir emoji", () => {
+  const longo = creditoValidado({ ...CAPA_BASE, credito: "a".repeat(5000) })!;
+  assert.equal(Array.from(longo).length, MAX_CREDITO);
+  assert.ok(longo.endsWith("…"));
+  // No limite exato nao corta.
+  assert.equal(creditoValidado({ ...CAPA_BASE, credito: "b".repeat(MAX_CREDITO) }), "b".repeat(MAX_CREDITO));
+  // Emoji (par substituto) na fronteira: nenhum surrogate solto.
+  const emoji = creditoValidado({ ...CAPA_BASE, credito: "😀".repeat(500) })!;
+  assert.equal(Array.from(emoji).length, MAX_CREDITO);
+  assert.doesNotMatch(emoji, /[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/);
+  // Espaco na fronteira nao deixa espaco antes das reticencias.
+  const espaco = creditoValidado({ ...CAPA_BASE, credito: `${"c".repeat(MAX_CREDITO - 2)} ${"d".repeat(50)}` })!;
+  assert.doesNotMatch(espaco, / …$/);
+  // No HTML sai o texto ja cortado, nunca o original.
+  assert.doesNotMatch(paginaDoPost(ctx, post(1, { capa: { ...CAPA_BASE, credito: longo } })), /a{201}/);
+});
+
+test("Template tambem se protege: credito cru e enorme (sem passar pela validacao) sai cortado e escapado", () => {
+  const html = paginaDoPost(ctx, post(1, { capa: { ...CAPA_BASE, credito: `<b>${"z".repeat(1000)}` } }));
+  assert.match(html, /<figcaption class="capa-credito">&lt;b&gt;z+…<\/figcaption>/);
+});
+
+// ---------------------------------------------------------------------------
+// Dominio canonico www (o apex sarjeta.com redireciona 307)
+// ---------------------------------------------------------------------------
+
+const WWW = "https://www.sarjeta.com";
+
+test("Padrao www: sitemap, RSS e canonical usam a base recebida sem o apex", () => {
+  const posts = [post(1, { capa: { ...CAPA_BASE, credito: "[exemplo] Foto: X" } })];
+  const sitemap = gerarSitemap(posts, WWW);
+  const rss = gerarRss(posts, WWW, 1_790_000_000_000);
+  for (const xml of [sitemap, rss]) {
+    assert.match(xml, /https:\/\/www\.sarjeta\.com\/blog\/post-1/);
+    assert.doesNotMatch(xml, /https:\/\/sarjeta\.com/);
+  }
+  const html = paginaDoPost({ siteUrl: WWW, md: criarMarkdown(WWW), semIndexar: false }, posts[0]!);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.sarjeta\.com\/blog\/post-1" \/>/);
+  assert.match(html, /<meta property="og:url" content="https:\/\/www\.sarjeta\.com\/blog\/post-1" \/>/);
+  assert.doesNotMatch(html, /https:\/\/sarjeta\.com/);
+});
+
+/** Roda o script de build de verdade em uma pasta vazia, sem rede (fixture) e sem SITE_URL. */
+function rodarBuild(cwd: string, env: Record<string, string>): { status: number | null; stdout: string; stderr: string } {
+  const limpo: NodeJS.ProcessEnv = { ...process.env };
+  for (const chave of ["SITE_URL", "BLOG_FIXTURE", "BLOG_API_URL", "VERCEL_ENV"]) delete limpo[chave];
+  const script = path.resolve("scripts/blog/build-blog.ts");
+  const r = spawnSync(process.execPath, [path.resolve("node_modules/tsx/dist/cli.mjs"), script], { cwd, env: { ...limpo, ...env }, encoding: "utf8" });
+  return { status: r.status, stdout: r.stdout, stderr: r.stderr };
+}
+
+test("build-blog sem SITE_URL usa https://www.sarjeta.com (fixture, sem rede); SITE_URL sobrescreve", async () => {
+  const cwd = await mkdtemp(path.join(tmpdir(), "blog-build-"));
+  try {
+    const fixture = path.resolve("scripts/fixtures/blog-exemplo.json");
+    const r = rodarBuild(cwd, { BLOG_FIXTURE: fixture });
+    assert.equal(r.status, 0, r.stderr);
+    for (const arq of ["sitemap.xml", "rss.xml", "blog/exemplo-post-completo/index.html"]) {
+      const txt = await readFile(path.join(cwd, "dist", arq), "utf8");
+      assert.match(txt, /https:\/\/www\.sarjeta\.com\//, arq);
+      assert.doesNotMatch(txt, /https:\/\/sarjeta\.com/, arq);
+    }
+    const r2 = rodarBuild(cwd, { BLOG_FIXTURE: fixture, SITE_URL: "https://preview.exemplo.com/" });
+    assert.equal(r2.status, 0, r2.stderr);
+    const sm = await readFile(path.join(cwd, "dist", "sitemap.xml"), "utf8");
+    assert.match(sm, /https:\/\/preview\.exemplo\.com\/blog/);
+    assert.doesNotMatch(sm, /sarjeta\.com/);
+  } finally {
+    await rm(cwd, { recursive: true, force: true });
+  }
+});
+
+test("build-blog com a rota fora do ar nao falha: sai 0, blog vazio e aviso", async () => {
+  const cwd = await mkdtemp(path.join(tmpdir(), "blog-build-"));
+  try {
+    const r = rodarBuild(cwd, { BLOG_API_URL: "http://127.0.0.1:9/blog/publicados", BLOG_TIMEOUT_MS: "3000" });
+    assert.equal(r.status, 0, r.stderr);
+    assert.match(r.stderr, /\[blog\] AVISO/);
+    assert.match(await readFile(path.join(cwd, "dist", "blog/index.html"), "utf8"), /Ainda não publicamos nada aqui\./);
+    assert.match(await readFile(path.join(cwd, "dist", "sitemap.xml"), "utf8"), /https:\/\/www\.sarjeta\.com/);
+  } finally {
+    await rm(cwd, { recursive: true, force: true });
+  }
+});
+
+test("Fixture: o post com credito mostra a legenda e o sem credito nao", async () => {
+  const bruto = JSON.parse(await readFile(new URL("../fixtures/blog-exemplo.json", import.meta.url), "utf8"));
+  const { posts } = validarResposta(bruto);
+  const com = paginaDoPost(ctx, posts.find((p) => p.slug === "exemplo-capa-com-credito")!);
+  const sem = paginaDoPost(ctx, posts.find((p) => p.slug === "exemplo-capa-sem-credito")!);
+  assert.match(com, /<figcaption class="capa-credito">\[exemplo\] Foto: Pessoa Ficticia<\/figcaption>/);
+  assert.doesNotMatch(sem, /figcaption/);
+  assert.match(sem, /<figure class="capa">/);
 });
