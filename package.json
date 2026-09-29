@@ -8,7 +8,8 @@
     "build": "vite build && tsx scripts/blog/build-blog.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test:blog": "tsx scripts/blog/blog.test.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",

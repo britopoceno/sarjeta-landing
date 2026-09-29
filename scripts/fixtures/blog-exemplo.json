@@ -1,0 +1,39 @@
+{
+  "geradoEm": 1790000000000,
+  "posts": [
+    {
+      "slug": "exemplo-post-completo",
+      "titulo": "[exemplo] Post completo com capa",
+      "resumo": "[exemplo] Texto ficticio para testar a listagem e a pagina do post. Nao e conteudo da Radio Sarjeta.",
+      "corpoMarkdown": "# [exemplo] Titulo de nivel 1 vira h2\n\nParagrafo com **negrito**, *enfase* e um [link externo](https://exemplo.com/pagina) e um [e-mail](mailto:exemplo@exemplo.com).\n\n## Lista\n\n- item um\n- item dois\n\n1. passo um\n2. passo dois\n\n> Citacao de exemplo.\n\n```\ncodigo de exemplo\n```\n\n---\n\nFim do texto de exemplo.",
+      "capa": { "url": "https://exemplo.com/capa-exemplo.png", "alt": "[exemplo] Descricao ficticia da capa" },
+      "categorias": ["exemplo", "teste"],
+      "autoria": "[exemplo] Pessoa Ficticia",
+      "publicadoEm": 1789900000000,
+      "atualizadoEm": 1789990000000
+    },
+    {
+      "slug": "exemplo-hostil",
+      "titulo": "[exemplo] Hostil <script>alert(1)</script> & \"aspas\"",
+      "resumo": "[exemplo] Resumo com <img src=x onerror=alert(1)> e \"aspas\".",
+      "corpoMarkdown": "<script>alert(1)</script>\n\n<img src=x onerror=alert(1)>\n\n[clique](javascript:alert(1)) e [outro](JaVaScRiPt:alert(1)) e [tab](java\tscript:alert(1))\n\n![img](https://exemplo.com/rastreio.gif)\n\n<a href=\"javascript:x\">html cru</a>\n\n[data](data:text/html;base64,PHNjcmlwdD4=)",
+      "capa": null,
+      "categorias": ["<b>exemplo</b>"],
+      "autoria": "[exemplo] <i>Autoria</i>",
+      "publicadoEm": 1789800000000,
+      "atualizadoEm": 1789800000000
+    },
+    {
+      "slug": "exemplo-sem-capa",
+      "titulo": "[exemplo] Post sem capa",
+      "resumo": "",
+      "corpoMarkdown": "Corpo curto de exemplo, sem resumo e sem capa.",
+      "capa": null,
+      "categorias": [],
+      "autoria": "",
+      "publicadoEm": 1789700000000,
+      "atualizadoEm": 1789700000000
+    },
+    { "slug": "exemplo-invalido", "resumo": "[exemplo] post sem titulo, deve ser descartado" }
+  ]
+}
