@@ -1,5 +1,15 @@
 {
   "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/((?!api/|blog|sitemap[.]xml|rss[.]xml).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/blog/:path*",
+      "headers": [
+        { "key": "Content-Security-Policy", "value": "default-src 'none'; img-src 'self' data: https://*.convex.cloud; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
   ]
 }
