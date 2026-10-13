@@ -63,24 +63,32 @@ type Pagina = {
   autoria?: string;
 };
 
+/** Mesmo topo da home: logo girando, nome e os links na mesma ordem. */
 function cabecalhoDoSite(): string {
   return `<a class="pular" href="#conteudo">Pular para o conteúdo</a>
 <header class="topo">
-  <a class="marca" href="/">${NOME}</a>
+  <a class="marca" href="/"><img class="marca-logo" src="/logo.png" alt="" width="48" height="48" /><span>${NOME}</span></a>
   <nav aria-label="Principal">
     <ul>
       <li><a href="/#manifesto">Quem somos</a></li>
       <li><a href="/#projetos">Projetos</a></li>
-      <li><a href="/#contato">Conexão</a></li>
       <li><a href="/blog" aria-current="page">Blog</a></li>
+      <li><a href="/#contato">Conexão</a></li>
     </ul>
   </nav>
 </header>`;
 }
 
+/** Mesmo rodapé da home: nome, a frase do sertão de metal e os três quadrados. */
 function rodape(): string {
   return `<footer class="rodape">
-  <p><a href="/">${NOME}</a> · Desde 2020 · <a href="/rss.xml">RSS</a></p>
+  <div class="rodape-miolo">
+    <div>
+      <p class="rodape-marca"><a href="/">${NOME}</a></p>
+      <p class="rodape-linha">© 2020 Eu sei que ninguém viu o sertão de metal, mas eu sonhei. // contato@sarjeta.com // <a href="/rss.xml">RSS</a></p>
+    </div>
+    <div class="quadrados" aria-hidden="true"><span></span><span></span><span></span></div>
+  </div>
 </footer>`;
 }
 

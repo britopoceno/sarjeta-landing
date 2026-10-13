@@ -11,7 +11,7 @@ import { test } from "node:test";
 import { spawnSync } from "node:child_process";
 import { MAX_CREDITO, validarPost, validarResposta, type Post } from "./dados.ts";
 import { gerarRss, gerarSitemap, POSTS_POR_PAGINA } from "./feeds.ts";
-import { gerarBlog } from "./gerar.ts";
+import { gerarBlog, ULTIMOS_NA_HOME } from "./gerar.ts";
 import { criarMarkdown, linkPermitido } from "./markdown.ts";
 import { paginaDaLista, paginaDoPost } from "./template.ts";
 
@@ -293,8 +293,27 @@ test("Estado vazio em disco: /blog existe, sem posts, sitemap e rss so com a hom
   const dist = await mkdtemp(path.join(tmpdir(), "blog-teste-"));
   try {
     const { arquivos } = await gerarBlog({ dist, siteUrl: `${SITE}/`, posts: [] });
-    assert.deepEqual(arquivos.sort(), ["blog/index.html", "rss.xml", "sitemap.xml"]);
+    assert.deepEqual(arquivos.sort(), ["blog/index.html", "blog/ultimos.json", "rss.xml", "sitemap.xml"]);
     assert.match(await readFile(path.join(dist, "blog/index.html"), "utf8"), /Ainda não publicamos nada aqui\./);
+    assert.deepEqual(JSON.parse(await readFile(path.join(dist, "blog/ultimos.json"), "utf8")), { posts: [] });
+  } finally {
+    await rm(dist, { recursive: true, force: true });
+  }
+});
+
+test("ultimos.json da home: os 3 mais recentes, sem o corpo do post", async () => {
+  const dist = await mkdtemp(path.join(tmpdir(), "blog-teste-"));
+  try {
+    const capa = { url: "https://exemplo.convex.cloud/capa.png", alt: "Capa", credito: "Foto: alguem" };
+    const posts = [post(1, { capa, categorias: ["agenda"] }), post(2), post(3), post(4)];
+    const { arquivos } = await gerarBlog({ dist, siteUrl: SITE, posts });
+    assert.ok(arquivos.includes("blog/ultimos.json"));
+    const { posts: ultimos } = JSON.parse(await readFile(path.join(dist, "blog/ultimos.json"), "utf8"));
+    assert.equal(ultimos.length, ULTIMOS_NA_HOME);
+    assert.deepEqual(ultimos.map((p: { slug: string }) => p.slug), ["post-1", "post-2", "post-3"]);
+    assert.deepEqual(Object.keys(ultimos[0]).sort(), ["capa", "categorias", "publicadoEm", "resumo", "slug", "titulo"]);
+    assert.deepEqual(ultimos[0].capa, { url: capa.url, alt: capa.alt });
+    assert.equal(ultimos[1].capa, null);
   } finally {
     await rm(dist, { recursive: true, force: true });
   }

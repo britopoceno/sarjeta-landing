@@ -2,7 +2,9 @@
   Estilo do blog estatico (paginas geradas por scripts/blog).
   Tokens da marca (src/index.css): laranja #FF4500, verde #39FF14, fundo #050505, superficie #121212.
   Regras: laranja e verde nunca se tocam (laranja = categorias e sombra do tema escuro;
-  verde = so foco e hover); bordas de 3px; sombra dura sem blur; Anton com line-height >= 1.
+  verde = foco, hover e o cartao do estado vazio); sombra dura sem blur; Anton com line-height >= 1.
+  Mesma pele da home: grade pontilhada, ruido, titulo gigante em Syne, cartoes tortos que
+  assentam no hover, logo girando e o rodape branco com os tres quadrados. Sem JavaScript.
   Dois temas verdadeiros por prefers-color-scheme, sem o filtro de inversao da home.
 */
 
@@ -10,6 +12,7 @@
   color-scheme: dark light;
   --laranja: #ff4500;
   --verde: #39ff14;
+  --preto: #050505;
 
   --fundo: #050505;
   --superficie: #121212;
@@ -19,6 +22,7 @@
   --sombra: #ff4500;
   --foco: #39ff14;
   --chip-borda: #050505;
+  --ponto: rgba(255, 255, 255, 0.05);
 
   --fonte-impacto: "Anton", "Arial Narrow", sans-serif;
   --fonte-titulo: "Syne", "Space Grotesk", sans-serif;
@@ -36,6 +40,7 @@
     --sombra: #0a0a0a;
     --foco: #0a0a0a;
     --chip-borda: #0a0a0a;
+    --ponto: rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -50,18 +55,11 @@ html {
   scroll-behavior: smooth;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  * {
-    transition: none !important;
-  }
-}
-
 body {
   margin: 0;
-  background: var(--fundo);
+  background-color: var(--fundo);
+  background-image: radial-gradient(circle at 2px 2px, var(--ponto) 1px, transparent 0);
+  background-size: 40px 40px;
   color: var(--texto);
   font-family: var(--fonte-corpo);
   font-size: 1.125rem;
@@ -69,6 +67,23 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Ruido por cima de tudo, como na home. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.03;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.15%22/%3E%3C/svg%3E');
+}
+
+::selection {
+  background: var(--verde);
+  color: var(--preto);
 }
 
 a {
@@ -89,14 +104,14 @@ main:focus {
 /* Hover: verde chapado com texto preto, nunca junto de laranja. */
 a:hover {
   background: var(--verde);
-  color: #050505;
+  color: var(--preto);
 }
 
 .pular {
   position: absolute;
   left: 1rem;
   top: -4rem;
-  z-index: 10;
+  z-index: 110;
   padding: 0.75rem 1rem;
   background: var(--superficie);
   color: var(--texto);
@@ -108,31 +123,51 @@ a:hover {
   top: 1rem;
 }
 
-/* Topo */
+/* Topo: logo girando e o nome, como a home */
 .topo {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem 1.5rem;
-  padding: 1rem 1rem;
-  border-bottom: 3px solid var(--borda);
+  padding: 1rem;
 }
 
 .marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
   font-family: var(--fonte-titulo);
   font-weight: 800;
   font-size: 1.5rem;
   line-height: 1.2;
   text-transform: uppercase;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.05em;
   text-decoration: none;
+  min-height: 44px;
+}
+
+.marca:hover {
+  background: transparent;
+  color: inherit;
+}
+
+.marca-logo {
+  width: 48px;
+  height: 48px;
+  animation: girar 10s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    rotate: 360deg;
+  }
 }
 
 .topo nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1.25rem;
+  gap: 0.25rem 1.5rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -143,10 +178,10 @@ a:hover {
   padding: 0.5rem 0.25rem;
   min-height: 44px;
   line-height: 1.75rem;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.3em;
   text-decoration: none;
 }
 
@@ -159,9 +194,9 @@ a:hover {
 /* Miolo */
 .miolo {
   width: 100%;
-  max-width: 68rem;
+  max-width: 72rem;
   margin: 0 auto;
-  padding: 2.5rem 1rem 4rem;
+  padding: 2.5rem 1rem 6rem;
   flex: 1;
 }
 
@@ -181,25 +216,31 @@ a:hover {
   font-weight: 700;
 }
 
+/* O titulo gigante em Syne, como RADIO SARJETA na home. */
 .titulo-blog {
-  font-family: var(--fonte-impacto);
-  font-weight: 400;
-  font-size: clamp(3.5rem, 14vw, 8rem);
-  line-height: 1.1;
+  font-family: var(--fonte-titulo);
+  font-weight: 800;
+  font-size: clamp(3.5rem, 20vw, 14rem);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
   text-transform: uppercase;
-  margin: 0.25rem 0 2rem;
+  margin: 0.5rem 0 3rem;
 }
 
+/* Estado vazio: o cartao verde torto da abertura da home. */
 .vazio {
-  border: 3px solid var(--borda);
-  background: var(--superficie);
-  box-shadow: 8px 8px 0 0 var(--sombra);
+  border: 4px solid var(--preto);
+  background: var(--verde);
+  color: var(--preto);
+  box-shadow: 12px 12px 0 0 var(--preto);
   padding: 2rem 1.5rem;
-  font-family: var(--fonte-titulo);
-  font-weight: 700;
-  font-size: 1.5rem;
-  line-height: 1.3;
+  font-family: var(--fonte-impacto);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+  line-height: 1.15;
+  text-transform: uppercase;
   max-width: 34rem;
+  rotate: -2deg;
 }
 
 /* Chips de categoria: laranja com texto preto (contraste 6:1) nos dois temas. */
@@ -214,7 +255,7 @@ a:hover {
 
 .chips li {
   background: var(--laranja);
-  color: #050505;
+  color: var(--preto);
   border: 2px solid var(--chip-borda);
   padding: 0.125rem 0.625rem;
   font-family: var(--fonte-mono);
@@ -229,7 +270,7 @@ a:hover {
 .lista {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 2.5rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -238,7 +279,17 @@ a:hover {
 @media (min-width: 48rem) {
   .lista {
     grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
+    gap: 3.5rem 3rem;
+  }
+
+  /* Cartoes tortos e em degrau, como os da home. */
+  .lista > li:nth-child(odd) .cartao {
+    rotate: -1deg;
+  }
+
+  .lista > li:nth-child(even) .cartao {
+    rotate: 1.5deg;
+    margin-top: 3rem;
   }
 }
 
@@ -248,14 +299,16 @@ a:hover {
   display: flex;
   flex-direction: column;
   background: var(--superficie);
-  border: 3px solid var(--borda);
-  box-shadow: 8px 8px 0 0 var(--sombra);
-  transition: transform 0.15s, box-shadow 0.15s;
+  border: 4px solid var(--borda);
+  box-shadow: 12px 12px 0 0 var(--sombra);
+  transition: rotate 0.3s, translate 0.3s, box-shadow 0.3s;
 }
 
-.cartao:hover {
-  transform: translate(4px, 4px);
-  box-shadow: 4px 4px 0 0 var(--sombra);
+/* No hover o cartao assenta: endireita e afunda. */
+.lista > li .cartao:hover {
+  rotate: 0deg;
+  translate: 4px 4px;
+  box-shadow: 8px 8px 0 0 var(--sombra);
 }
 
 .cartao:focus-within {
@@ -264,7 +317,7 @@ a:hover {
 }
 
 .cartao-capa {
-  border-bottom: 3px solid var(--borda);
+  border-bottom: 4px solid var(--borda);
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background: var(--fundo);
@@ -278,14 +331,16 @@ a:hover {
 }
 
 .cartao-texto {
-  padding: 1.25rem;
+  padding: 1.5rem;
 }
 
 .cartao h2 {
   font-family: var(--fonte-titulo);
   font-weight: 800;
-  font-size: 1.625rem;
-  line-height: 1.15;
+  font-size: clamp(1.625rem, 4vw, 2.125rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
   margin: 0.5rem 0 0.75rem;
   overflow-wrap: anywhere;
 }
@@ -324,23 +379,25 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 3rem;
+  margin-top: 4rem;
 }
 
 .paginacao a {
   display: inline-block;
   padding: 0.75rem 1rem;
   min-height: 44px;
-  border: 3px solid var(--borda);
+  border: 4px solid var(--borda);
   background: var(--superficie);
-  box-shadow: 4px 4px 0 0 var(--sombra);
+  box-shadow: 6px 6px 0 0 var(--sombra);
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
   text-decoration: none;
 }
 
 /* Post */
 .post {
-  max-width: 44rem;
+  max-width: 46rem;
 }
 
 .voltar {
@@ -355,24 +412,27 @@ a:hover {
   min-height: 44px;
 }
 
+/* Titulo do post sem caixa-alta: e lugar de leitura. */
 .titulo-post {
   font-family: var(--fonte-titulo);
   font-weight: 800;
   font-size: clamp(2rem, 7vw, 3.25rem);
-  line-height: 1.1;
-  margin: 0 0 1rem;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 0 0 1.25rem;
   overflow-wrap: anywhere;
 }
 
 .post-cabecalho {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .capa {
-  margin: 0 0 2rem;
-  border: 3px solid var(--borda);
-  box-shadow: 8px 8px 0 0 var(--sombra);
+  margin: 0 0 2.5rem;
+  border: 4px solid var(--borda);
+  box-shadow: 12px 12px 0 0 var(--sombra);
   background: var(--superficie);
+  rotate: -1deg;
 }
 
 .capa img {
@@ -384,7 +444,7 @@ a:hover {
 .capa-credito {
   margin: 0;
   padding: 0.5rem 0.75rem;
-  border-top: 3px solid var(--borda);
+  border-top: 4px solid var(--borda);
   color: var(--suave);
   font-family: var(--fonte-mono);
   font-size: 0.875rem;
@@ -392,7 +452,7 @@ a:hover {
   overflow-wrap: anywhere;
 }
 
-/* Texto de leitura: coluna de ate 68 caracteres, 18px, altura de linha 1,65. */
+/* Texto de leitura: coluna de ate 68 caracteres, 18px, altura de linha 1,65. Sem giro. */
 .corpo {
   max-width: 68ch;
   overflow-wrap: break-word;
@@ -479,34 +539,95 @@ a:hover {
   margin: 2.5rem 0;
 }
 
-/* Rodape */
+/* Rodape branco da home, nos dois temas. */
 .rodape {
-  border-top: 3px solid var(--borda);
-  padding: 1.5rem 1rem;
-  font-family: var(--fonte-mono);
-  font-size: 0.9375rem;
+  border-top: 4px solid var(--preto);
+  background: #ffffff;
+  color: var(--preto);
+  padding: 4rem 1rem;
+}
+
+.rodape-miolo {
+  max-width: 72rem;
+  margin-inline: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
 }
 
 .rodape p {
   margin: 0;
-  max-width: 68rem;
-  margin-inline: auto;
 }
 
-.rodape a {
+.rodape-marca {
+  font-family: var(--fonte-titulo);
+  font-weight: 800;
+  font-size: 2.25rem;
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.rodape-marca a {
+  text-decoration: none;
+}
+
+.rodape-linha {
+  font-family: var(--fonte-mono);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 0.5rem !important;
+}
+
+.rodape-linha a {
   display: inline-block;
   padding: 0.5rem 0.125rem;
   min-height: 44px;
   line-height: 1.75rem;
 }
 
+.rodape a:focus-visible {
+  outline-color: var(--preto);
+}
+
+.quadrados {
+  display: flex;
+  gap: 1rem;
+}
+
+.quadrados span {
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid var(--preto);
+}
+
+.quadrados span:nth-child(1) {
+  background: var(--laranja);
+}
+
+.quadrados span:nth-child(2) {
+  background: var(--verde);
+}
+
+.quadrados span:nth-child(3) {
+  background: var(--preto);
+}
+
 @media (min-width: 48rem) {
   .topo {
-    padding: 1.25rem 1.5rem;
+    padding: 1.5rem;
   }
+
   .miolo {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+  }
+
+  .rodape {
+    padding-inline: 1.5rem;
   }
 }
 
@@ -514,7 +635,22 @@ a:hover {
 .paginacao a:hover {
   background: var(--superficie);
   color: inherit;
-  transform: translate(2px, 2px);
+  translate: 2px 2px;
   box-shadow: 2px 2px 0 0 var(--sombra);
   text-decoration: underline;
+}
+
+/* Movimento reduzido: a logo para, nada desliza. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marca-logo {
+    animation: none;
+  }
+
+  * {
+    transition: none !important;
+  }
 }
