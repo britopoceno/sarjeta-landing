@@ -9,11 +9,14 @@
   --font-display: "Syne", sans-serif;
   --font-body: "Space Grotesk", sans-serif;
   --font-impact: "Anton", sans-serif;
+  /* A mesma voz datilografada do blog. */
+  --font-mono: "Courier Prime", "Courier New", monospace;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
     overflow-x: hidden;
   }
 
@@ -35,6 +38,16 @@
     color: #f3f4f6;
     overflow-x: hidden;
     font-family: var(--font-body);
+    font-weight: 400;
+  }
+
+  ::selection {
+    background-color: var(--color-secondary);
+    color: #000;
+  }
+
+  [hidden] {
+    display: none !important;
   }
 
   h1,
@@ -46,12 +59,10 @@
   }
 }
 
+/* Fundo: grade pontilhada e ruido. */
 .brutalist-bg {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background-color: #050505;
   background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
   background-size: 40px 40px;
@@ -62,6 +73,7 @@
   background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.15%22/%3E%3C/svg%3E');
 }
 
+/* Titulo fixo: RADIO SARJETA atras de tudo; a palavra cheia troca a cada secao. */
 .fixed-title {
   position: fixed;
   top: 50%;
@@ -71,52 +83,422 @@
   pointer-events: none;
   width: 100%;
   text-align: center;
-}
-
-.brutalist-card {
-  position: relative;
-  padding: 1rem;
-  border: 4px solid black;
-  box-shadow: 12px 12px 0px 0px rgba(0, 0, 0, 1);
-  transition: all 0.5s;
+  --contorno: 1px;
 }
 
 @media (min-width: 768px) {
-  .brutalist-card {
-    padding: 3rem;
+  .fixed-title {
+    --contorno: 2px;
   }
 }
 
-.text-stroke-custom {
-  -webkit-text-stroke: 1.5px white;
-  color: transparent;
+.palavra {
+  color: white;
+  -webkit-text-stroke: 0px white;
+  transition: color 0.7s, -webkit-text-stroke 0.7s;
 }
 
-.block-section {
-  min-height: 100vh;
+.palavra.contorno {
+  color: transparent;
+  -webkit-text-stroke: var(--contorno) white;
+}
+
+/* Grade e ritmo: uma largura, uma margem, um espacamento entre secoes. */
+.largura {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: max(1rem, 5vw);
+}
+
+.secao {
   position: relative;
-  padding-top: 6rem;
-  padding-bottom: 6rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-block: clamp(6rem, 12vw, 11rem);
+}
+
+/* Escala de tipo */
+.rotulo {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.titulo-2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.875rem, 8.5vw, 6.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.titulo-2--menor {
+  font-size: clamp(1.875rem, 6vw, 5.5rem);
+}
+
+.titulo-3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.875rem, 3.4vw, 3.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.lead {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1.3;
+}
+
+.lead--abertura {
+  font-size: clamp(1.125rem, 1.8vw, 1.5rem);
+}
+
+.texto {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+/* Cartao: borda de 4px e sombra dura que aparece no fundo preto.
+   Branca no verde e no laranja, laranja no branco e no preto: laranja e verde nunca se tocam. */
+.cartao {
+  position: relative;
+  border: 4px solid #050505;
+  padding: clamp(1.25rem, 3.2vw, 3rem);
+  --sombra-x: 8px;
+  box-shadow: var(--sombra-x) var(--sombra-x) 0 0 var(--sombra, #fff);
+  transition: translate 0.3s, rotate 0.3s, box-shadow 0.3s;
+}
+
+@media (min-width: 768px) {
+  .cartao {
+    --sombra-x: 12px;
+  }
+}
+
+.cartao--verde {
+  background: var(--color-secondary);
+  color: #050505;
+  --sombra: #fff;
+}
+
+.cartao--laranja {
+  background: var(--color-primary);
+  color: #050505;
+  --sombra: #fff;
+}
+
+.cartao--branco {
+  background: #fff;
+  color: #050505;
+  --sombra: var(--color-primary);
+}
+
+.cartao--preto {
+  background: #050505;
+  color: #fff;
+  border-color: #fff;
+  --sombra: var(--color-primary);
+}
+
+/* Cartao clicavel assenta no hover: endireita e afunda na propria sombra. */
+.cartao--assenta:hover,
+.cartao--assenta:focus-within {
+  rotate: 0deg;
+  translate: 4px 4px;
+  box-shadow: calc(var(--sombra-x) - 4px) calc(var(--sombra-x) - 4px) 0 0 var(--sombra, #fff);
+}
+
+/* Botoes */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 0.8rem 1.25rem;
+  border: 4px solid #050505;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  line-height: 1;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 6px 6px 0 0 var(--sombra-botao, #fff);
+  transition: translate 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s;
+}
+
+@media (max-width: 767px) {
+  .botao {
+    padding: 0.75rem 0.8rem;
+    gap: 0.4rem;
+    letter-spacing: 0.06em;
+  }
+}
+
+.botao:hover {
+  translate: 3px 3px;
+  box-shadow: 3px 3px 0 0 var(--sombra-botao, #fff);
+}
+
+.botao--laranja {
+  background: var(--color-primary);
+  color: #050505;
+  --sombra-botao: #fff;
+}
+
+.botao--branco {
+  background: #fff;
+  color: #050505;
+  --sombra-botao: var(--color-primary);
+}
+
+.botao--preto {
+  background: #050505;
+  color: #fff;
+  --sombra-botao: #fff;
+}
+
+/* Dentro de cartao claro, a sombra do botao e preta. */
+.cartao--branco .botao,
+.cartao--verde .botao {
+  --sombra-botao: #050505;
+}
+
+/* Seta quadrada em cartao claro: quadrado preto. */
+.seta-link--escura .seta-quadrado {
+  background: #050505;
+  color: #fff;
+}
+
+/* Seta quadrada dos cartoes pretos, como na landing de hoje. */
+.seta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.seta-quadrado {
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  color: #050505;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.seta-link:hover .seta-quadrado {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* Foto: preto e branco com grao; cor no hover (mouse) ou no meio da tela (toque). */
+.foto {
+  position: relative;
+  overflow: hidden;
+  border: 4px solid #050505;
+  background: #121212;
+}
+
+.foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.foto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22g%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23g)%22/%3E%3C/svg%3E');
+  background-size: 220px;
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+}
+
+.foto--quadrada {
+  aspect-ratio: 1 / 1;
+}
+
+.foto--destaque {
+  aspect-ratio: 4 / 5;
+}
+
+@media (min-width: 768px) {
+  .foto--destaque {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* Abertura: o nome no meio, a frase e as acoes embaixo. */
+.abertura {
+  position: relative;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-top: 7rem;
+  /* Espaco para o botao de tema no canto nao cobrir a abertura. */
+  padding-bottom: clamp(5.5rem, 8vw, 7rem);
+}
+
+.abertura-base {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: end;
 }
 
 @media (min-width: 768px) {
-  .block-section {
-    padding-top: 8rem;
-    padding-bottom: 8rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+  .abertura-base {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  .abertura-cartao {
+    grid-column: 1 / span 6;
+  }
+
+  .abertura-acoes {
+    grid-column: 8 / span 5;
   }
 }
 
+/* Projetos: pares em degrau e o Bueiro Beat em destaque no meio. */
+.projetos-dupla {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 5rem;
+}
+
+@media (min-width: 768px) {
+  .projetos-dupla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4rem;
+  }
+
+  .projetos-dupla > :nth-child(2) {
+    margin-top: 12rem;
+  }
+}
+
+.projeto-cartao {
+  margin-top: -4rem;
+  margin-left: 1.25rem;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .projeto-cartao {
+    margin-top: -7rem;
+    margin-left: 3rem;
+    margin-right: -1.5rem;
+  }
+
+  .projeto--espelho .projeto-cartao {
+    margin-left: -1.5rem;
+    margin-right: 3rem;
+  }
+}
+
+.projeto-destaque-cartao {
+  margin: -5rem 1rem 0;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .projeto-destaque {
+    display: grid;
+  }
+
+  .projeto-destaque > * {
+    grid-area: 1 / 1;
+  }
+
+  .projeto-destaque-cartao {
+    margin: 0;
+    align-self: center;
+    justify-self: center;
+    max-width: 40rem;
+  }
+}
+
+/* Conexao: as redes como linhas grandes */
+.redes a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-top: 3px solid #050505;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.375rem, 3vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s, padding 0.2s;
+}
+
+.redes li:last-child a {
+  border-bottom: 3px solid #050505;
+}
+
+.redes a:hover {
+  background: #050505;
+  color: #fff;
+  padding-inline: 1rem;
+}
+
+/* Rodape branco */
+.rodape {
+  background: #fff;
+  color: #050505;
+  border-top: 4px solid #050505;
+  padding-block: 4.5rem 2.5rem;
+}
+
+.rodape-hoje {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.quadrados {
+  display: flex;
+  gap: 1rem;
+}
+
+.quadrados span {
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid #050505;
+}
+
+/* Letreiro */
 .marquee-fast {
   display: flex;
   width: max-content;
-  animation: marquee-scroll 15s linear infinite;
+  animation: marquee-scroll var(--letreiro-duracao, 15s) linear infinite;
   will-change: transform;
   backface-visibility: hidden;
 }
@@ -129,6 +511,22 @@
   100% {
     transform: translateX(-50%);
   }
+}
+
+/* Blog na home: o titulo cobre o cartao inteiro. */
+.blog-cartao-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.blog-cartao-link:focus-visible {
+  outline: none;
+}
+
+.blog-cartao:focus-within {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 6px;
 }
 
 ::-webkit-scrollbar {
@@ -158,6 +556,64 @@
   }
 }
 
+.animate-breathing {
+  display: block;
+}
+
 .animate-breathing:hover {
   animation: breathing 2s ease-in-out infinite;
+}
+
+@keyframes girar {
+  to {
+    rotate: 360deg;
+  }
+}
+
+.logo-girando {
+  animation: girar 10s linear infinite;
+}
+
+/* Pular para o conteudo: aparece so no foco do teclado. */
+.pular {
+  position: fixed;
+  left: 1rem;
+  top: -6rem;
+  z-index: 200;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  color: #050505;
+  border: 4px solid #050505;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.pular:focus {
+  top: 1rem;
+}
+
+/* Movimento reduzido: nada gira, corre nem respira; trocas sem transicao. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-fast,
+  .logo-girando,
+  .animate-breathing:hover {
+    animation: none;
+  }
+
+  .palavra,
+  .cartao,
+  .botao,
+  .redes a,
+  .seta-quadrado,
+  .transition-all,
+  .transition-colors,
+  .transition-transform {
+    transition: none;
+  }
 }
